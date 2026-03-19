@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milano Nascosta — La Colonna del Diavolo</title>
+  <meta name="description" content="Milano Nascosta Tours — La Colonna del Diavolo" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="show-gate">
+  <main class="hero">
+    <video
+      id="bgVideo"
+      class="bg-video"
+      muted
+      loop
+      playsinline
+      webkit-playsinline
+      preload="metadata"
+      controlslist="nodownload noplaybackrate nofullscreen"
+    >
+      <source src="video.mp4" type="video/mp4" />
+      Il tuo browser non supporta il video HTML5.
+    </video>
+
+    <div class="overlay"></div>
+
+    <section class="content">
+      <p class="eyebrow">Milano Nascosta</p>
+      <h1>MILANO NASCOSTA</h1>
+      <h2>La Colonna del Diavolo</h2>
+    </section>
+
+    <div id="startGate" class="start-gate" aria-live="polite">
+      <button id="playButton" class="play-button" type="button" aria-label="Avvia video">
+        <span class="play-icon"></span>
+        <span class="play-label">Avvia video</span>
+      </button>
+      <p class="gate-note">Se non parte da solo, tocca qui.</p>
+    </div>
+
+    <footer class="site-footer">
+      <p>Milano Nascosta Tours</p>
+    </footer>
+  </main>
+
+  <script>
+    const video = document.getElementById('bgVideo');
+    const playButton = document.getElementById('playButton');
+    const startGate = document.getElementById('startGate');
+
+    function hideGate() {
+      document.body.classList.remove('show-gate');
+      document.body.classList.add('is-playing');
+    }
+
+    function showGate() {
+      document.body.classList.add('show-gate');
+      document.body.classList.remove('is-playing');
+    }
+
+    async function startVideo(withSound = false) {
+      try {
+        video.muted = !withSound;
+        await video.play();
+        hideGate();
+      } catch (err) {
+        try {
+          video.muted = true;
+          await video.play();
+          hideGate();
+        } catch (err2) {
+          showGate();
+          video.setAttribute('controls', 'controls');
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      showGate();
+      startVideo(false);
+    });
+
+    playButton.addEventListener('click', () => startVideo(true));
+    startGate.addEventListener('click', (event) => {
+      if (event.target === startGate) startVideo(true);
+    });
+
+    video.addEventListener('pause', () => {
+      if (!video.ended) showGate();
+    });
+
+    video.addEventListener('playing', hideGate);
+  </script>
+</body>
+</html>
