@@ -14,10 +14,15 @@
   <main class="hero">
     <div class="overlay"></div>
 
-    <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline webkit-playsinline preload="auto" controlslist="nodownload noplaybackrate nofullscreen">
       <source src="La%20Colonna%20del%20Diavolo.mp4" type="video/mp4" />
       Il tuo browser non supporta il video HTML5.
     </video>
+
+    <button id="playButton" class="play-button" type="button" aria-label="Avvia video">
+      <span class="play-icon"></span>
+      <span class="play-label">Avvia video</span>
+    </button>
 
     <section class="content">
       <p class="eyebrow">Milano Nascosta</p>
@@ -29,5 +34,41 @@
       <p>Milano Nascosta Tours</p>
     </footer>
   </main>
+
+  <script>
+    const video = document.getElementById('bgVideo');
+    const playButton = document.getElementById('playButton');
+
+    async function tryAutoplay() {
+      try {
+        video.muted = true;
+        video.playsInline = true;
+        await video.play();
+        document.body.classList.add('is-playing');
+      } catch (err) {
+        document.body.classList.add('needs-play');
+      }
+    }
+
+    function startVideo() {
+      video.muted = false;
+      video.play()
+        .then(() => {
+          document.body.classList.remove('needs-play');
+          document.body.classList.add('is-playing');
+        })
+        .catch(() => {
+          video.muted = true;
+          video.play().then(() => {
+            document.body.classList.remove('needs-play');
+            document.body.classList.add('is-playing');
+          });
+        });
+    }
+
+    playButton.addEventListener('click', startVideo);
+    video.addEventListener('click', startVideo);
+    window.addEventListener('load', tryAutoplay);
+  </script>
 </body>
 </html>

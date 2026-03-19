@@ -4,6 +4,8 @@
   --muted: rgba(244, 240, 232, 0.75);
   --line: rgba(244, 240, 232, 0.16);
   --shadow: rgba(0, 0, 0, 0.55);
+  --button-bg: rgba(10, 10, 10, 0.55);
+  --button-border: rgba(244, 240, 232, 0.45);
 }
 
 * {
@@ -40,6 +42,7 @@ body {
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  cursor: pointer;
 }
 
 .overlay {
@@ -59,6 +62,7 @@ body {
   text-align: center;
   padding: 28px 24px;
   text-shadow: 0 10px 35px var(--shadow);
+  pointer-events: none;
 }
 
 .eyebrow {
@@ -90,6 +94,48 @@ h2 {
   color: var(--muted);
 }
 
+.play-button {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: none;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--text);
+  padding: 14px 22px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font: inherit;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.play-icon {
+  width: 0;
+  height: 0;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 14px solid var(--text);
+  margin-left: 4px;
+}
+
+.play-label {
+  font-size: 0.78rem;
+}
+
+body.needs-play .play-button {
+  display: inline-flex;
+}
+
+body.is-playing .play-button {
+  display: none;
+}
+
 .site-footer {
   position: absolute;
   left: 0;
@@ -98,6 +144,7 @@ h2 {
   z-index: 2;
   padding: 0 24px;
   text-align: center;
+  pointer-events: none;
 }
 
 .site-footer p {
@@ -124,6 +171,15 @@ h2 {
   .eyebrow {
     font-size: 0.72rem;
     letter-spacing: 0.24em;
+  }
+
+  .play-button {
+    gap: 12px;
+    padding: 12px 18px;
+  }
+
+  .play-label {
+    font-size: 0.72rem;
   }
 
   .site-footer {
